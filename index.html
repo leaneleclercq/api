@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Holidays</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dist/styles/main.css"> 
+</head>
+<body>
+    <div class="filter">
+        <label class="titre" for="yearSelect"></label>
+        <select class="select" id="yearSelect">
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+        </select>
+    </div>
+    <div class="pays">
+        <div class="cadrePays">
+            <div class="Canada">
+                <span class="CA">Canada</span>
+                <img src="dist/images/canada.webp" class="imgCA" onclick="getHolidays('Canada')">
+            </div>
+            <div class="Brazil">
+                <span class="BR">Brazil</span>
+                <img src="dist/images/bresil.webp" class="imgBR" onclick="getHolidays('Brazil')">
+            </div>
+            <div class="Italy">
+                <span class="IT">Italy</span>
+                <img src="dist/images/italie.jpeg" class="imgIT" onclick="getHolidays('Italy')">
+            </div>
+            <div class="Spain">                
+                <span class="SP">Spain</span>
+                <img src="dist/images/espagne.jpeg" class="imgSP" onclick="getHolidays('Spain')">
+            </div>
+        </div>
+    </div>
+    <div class="pays">
+        <div class="cadrePays">
+            <div class="Canada">
+                <span class="CA">Germany</span>
+                <img src="dist/images/allemagne.webp" class="imgCA" onclick="getHolidays('Germany')">
+            </div>
+            <div class="Brazil">
+                <span class="BR">France</span>
+                <img src="dist/images/france.webp" class="imgBR" onclick="getHolidays('France')">
+            </div>
+            <div class="Italy">
+                <span class="IT">Australia</span>
+                <img src="dist/images/autralie.jpg" class="imgIT" onclick="getHolidays('Australia')">
+            </div>
+            <div class="Spain">                
+                <span class="SP">Japan</span>
+                <img src="dist/images/japon.jpeg" class="imgSP" onclick="getHolidays('Japan')">
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="donnees" id="holidaysContainer"></div>
+        </div>
+    </div>
+    <script>
+        function getHolidays(country) {
+            const year = document.getElementById('yearSelect').value;
+            const apiKey = 'Jh676qdvzeAGIaRXo3WMwg==RNnwd92PpUNdefoT';
+            const headers = {
+                'X-Api-Key': apiKey
+            };
+            fetch(`https://api.api-ninjas.com/v1/holidays?country=${country}&year=${year}`,{
+                headers: headers
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const holidaysElement = document.createElement('div');
+                    holidaysElement.classList.add('holidays-list');
+                    data.forEach(holiday => {
+                        const holidayItem = document.createElement('p');
+                        holidayItem.textContent = holiday.name + ' - ' + holiday.date;
+                        holidaysElement.appendChild(holidayItem);
+                    });
+                    document.getElementById('holidaysContainer').innerHTML = '';
+                    document.getElementById('holidaysContainer').appendChild(holidaysElement);
+                    document.getElementById('myModal').style.display = "block";
+                    
+                })
+                .catch(error => {
+                    console.error(`Une erreur s'est produite lors de la récupération des jours fériés pour ${country}:`, error);
+                });
+        }
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+    </script>
+</body>
+</html>
